@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>PrintBirka</title>
+    <!--<link rel="stylesheet" href="/static/css/bootstrap.min.css">-->
+    <link rel="icon" href="/static/paper.png" type="image/png">
+</head>
+<body>
+<header>
+    <h1 align="center"> Зона: грубо-среднее волочение </h1>
+</header>
+<form action="#" th:action="@{/exportToExcel/${area}/${millNumber}/${materialCode}}" th:object="${tagList}">
+    <table width="60%" border="3" align="center" style="border-collapse: collapse">
+        <tr align="center" th:each="t : ${tagList}">
+            <th>
+                <h3>
+                    <fieldset>
+                        <legend>
+                            Выбор зоны:
+                        </legend>
+                        <div style="display: flex; justify-content: center;">
+                            <div style="align-items: center">
+                                <input type="radio" id="D" name="drone" th:value="${t.area}"/>
+                                <label for="D">D</label>
+                            </div>
+                            <div style="align-items: center">
+                                <input type="radio" id="H" name="drone" th:value="${t.area}"/>
+                                <label for="H">H</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </h3>
+            </th>
+        </tr>
+        <tbody>
+        <tr align="center" th:each="t : ${tagList}">
+            <!--<td><select id="actionStatusD" name="actionStatusD" th:value="${millNumber}">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="10">10</option>
+            </select></td>
+            <td><select id="actionStatusH" name="actionStatusH" th:value="${millNumber}">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+            </select></td>-->
+            <td><label for="actionStatusD">D</label><input type="number" id="actionStatusD" th:value="${t.millNumber}">
+            </td>
+            <td><label for="actionStatusMaterialCode">D</label><input type="number" id="actionStatusMaterialCode" th:value="${t.materialCode}">
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+                <button type="submit" class="btn btn-success col-2"> Создать бирку</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<!--<script src="/static/js/jquery-3.6.4.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>-->
+</body>
+</html>
