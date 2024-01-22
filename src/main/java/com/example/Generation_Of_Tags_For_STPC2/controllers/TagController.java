@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class TagController {
@@ -24,13 +26,21 @@ public class TagController {
     }
 
     @GetMapping("/exportToExcel/{area}/{millNumber}/{materialCode}")
-    public void exportIntoExcelFile(HttpServletResponse response, @PathVariable(value = "area") String area,
-                                      @PathVariable(value = "millNumber") String millNumber,
-                                      @PathVariable(value = "materialCode") String materialCode, Model model) throws Exception {
-        List<Tag> tagList = tagRepo.findByAreaAndMillNumberAndMaterialCode(area, millNumber, materialCode);
+    public void exportIntoExcelFile(HttpServletResponse response, @PathVariable("area") String area,
+                                    @PathVariable("millNumber") String millNumber,
+                                    @PathVariable("materialCode") String materialCode) throws Exception {
         TagReport generator = new TagReport(tagRepo);
         generator.exportToExcel(area, millNumber, materialCode, response);
+    }
 
-        model.addAttribute("tagList", tagList);
+    @GetMapping("/exp-by-ar-mill-mat")
+    public String tagParam(@RequestParam("area") String area,
+                           @RequestParam("millNumber") String millNumber,
+                           @RequestParam("materialCode") String materialCode,
+                           Model model) {
+        model.addAttribute("area", area);
+        model.addAttribute("millNumber", millNumber);
+        model.addAttribute("materialCode", materialCode);
+        return "main";
     }
 }

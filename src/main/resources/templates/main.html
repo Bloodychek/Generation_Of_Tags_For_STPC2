@@ -3,38 +3,57 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>PrintBirka</title>
-    <!--<link rel="stylesheet" href="/static/css/bootstrap.min.css">-->
-    <link rel="icon" href="/static/paper.png" type="image/png">
+    <link rel="icon" href="/paper.png" type="image/png">
 </head>
 <body>
 <header>
     <h1 align="center"> Зона: грубо-среднее волочение </h1>
 </header>
-<form action="#" th:action="@{/exportToExcel/${area}/${millNumber}/${materialCode}}" th:object="${tagList}">
-    <table width="60%" border="3" align="center" style="border-collapse: collapse">
-        <tr align="center" th:each="t : ${tagList}">
-            <th>
-                <h3>
-                    <fieldset>
-                        <legend>
-                            Выбор зоны:
-                        </legend>
-                        <div style="display: flex; justify-content: center;">
-                            <div style="align-items: center">
-                                <input type="radio" id="D" name="drone" th:value="${t.area}"/>
-                                <label for="D">D</label>
+<form th:action="@{exp-by-ar-mill-mat}" method="get">
+        <table width="60%" border="3" align="center" style="border-collapse: collapse">
+            <div class="row justify-content-center">
+                <h3 class="text-center mt-1">Приход за период от:&nbsp; </h3>
+                <label for="area" class="mt-2">
+                    <input class="text-center" type="text" th:value="${area}" id="area" name="area"/>
+                </label> &nbsp;&nbsp;
+                <h3 class="text-center mt-1">mill:</h3>
+                <label for="millNumber" class="mt-2"> &nbsp;
+                    <input class="text-center" type="number" th:value="${millNumber}" id="millNumber" name="millNumber"/>
+                </label>&nbsp;
+                <h3 class="text-center mt-1">code:</h3>
+                <label for="materialCode" class="mt-2"> &nbsp;
+                    <input class="text-center" type="number" th:value="${materialCode}" id="materialCode" name="materialCode"/>
+                </label>&nbsp;
+            </div>
+            <label class="mt-1">
+                <button class="btn btn-primary mt-1" style="padding: 2px 13px" type="submit">Отобразить
+                </button>
+            </label>
+
+
+            <!--<tr align="center">
+                <th>
+                    <h3>
+                        <fieldset>
+                            <legend>
+                                Выбор зоны:
+                            </legend>
+                            <div style="display: flex; justify-content: center;">
+                                <div style="align-items: center">
+                                    <input type="radio" id="area" name="area" th:value="${area}"/>
+                                    <label for="area">D</label>
+                                </div>
+                                &lt;!&ndash;<div style="align-items: center">
+                                    <input type="radio" id="H" name="drone" th:value="${area}"/>
+                                    <label for="H">H</label>
+                                </div>&ndash;&gt;
                             </div>
-                            <div style="align-items: center">
-                                <input type="radio" id="H" name="drone" th:value="${t.area}"/>
-                                <label for="H">H</label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </h3>
-            </th>
-        </tr>
+                        </fieldset>
+                    </h3>
+                </th>
+            </tr>-->
         <tbody>
-        <tr align="center" th:each="t : ${tagList}">
+        <tr align="center">
             <!--<td><select id="actionStatusD" name="actionStatusD" th:value="${millNumber}">
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -62,21 +81,19 @@
                 <option value="13">13</option>
                 <option value="14">14</option>
             </select></td>-->
-            <td><label for="actionStatusD">D</label><input type="number" id="actionStatusD" th:value="${t.millNumber}">
+            <!--<td><label for="actionStatusD">D</label><input type="number" id="actionStatusD" th:value="${millNumber}">
             </td>
-            <td><label for="actionStatusMaterialCode">D</label><input type="number" id="actionStatusMaterialCode" th:value="${t.materialCode}">
-            </td>
+            <td><label for="actionStatusMaterialCode">D</label><input type="number" id="actionStatusMaterialCode" th:value="${materialCode}">
+            </td>-->
         </tr>
         <tr align="center">
             <td>
-                <button type="submit" class="btn btn-success col-2"> Создать бирку</button>
+
             </td>
         </tr>
         </tbody>
     </table>
 </form>
-<!--<script src="/static/js/jquery-3.6.4.min.js"></script>
-<script src="/static/js/popper.min.js"></script>
-<script src="/static/js/bootstrap.min.js"></script>-->
+<a th:href="@{'exportToExcel?' + '&area=' + ${area} + '&millNumber=' + ${millNumber} + '&materialCode=' + ${materialCode}}" class="">Печать бирки</a>
 </body>
 </html>
