@@ -25,19 +25,19 @@ public class TagReport {
     private Cell cell;
     private final TagRepo tagRepo;
 
-    public void exportToExcel(String area, String millNumber, String materialCode, HttpServletResponse response) throws Exception {
+    public void exportToExcel(String area, String millNumber, String materialCode, Integer diameter, Integer operator, HttpServletResponse response) throws Exception {
         InputStream file =
                 getClass().getClassLoader().getResourceAsStream(BIRKA_GSV + DOT_XLSX);
         if(file != null) workbook = new XSSFWorkbook(file);
 
         ApachePoiUtil.setResponseHeader(response, CONTENT_TYPE2, DOT_XLSX, BIRKA_GSV);
-        write(area, millNumber, materialCode);
+        write(area, millNumber, materialCode, diameter, operator);
         ServletOutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
         workbook.close();
         outputStream.close();
     }
-    private void write(String area, String millNumber, String materialCode){
+    private void write(String area, String millNumber, String materialCode, Integer diameter, Integer operator){
         List<Tag> tagList = tagRepo.findByAreaAndMillNumberAndMaterialCode(area, millNumber, materialCode);
         sheet = workbook.getSheet(SHEET_NAME);
         for (Tag t: tagList
@@ -55,7 +55,7 @@ public class TagReport {
             cell.setCellValue(t.getShift());
             row = sheet.getRow(3);
             cell = row.createCell(1);
-            cell.setCellValue(23);
+            cell.setCellValue(operator);
             cell = row.createCell(3);
             cell.setCellValue(t.getDateTime().format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
             cell = row.createCell(5);
@@ -64,7 +64,7 @@ public class TagReport {
             cell = row.createCell(1);
             cell.setCellValue(t.getMaterialCode());
             cell = row.createCell(3);
-            cell.setCellValue(44);
+            cell.setCellValue(diameter);
             cell = row.createCell(5);
             cell.setCellValue(t.getWeight());
             row = sheet.getRow(5);
