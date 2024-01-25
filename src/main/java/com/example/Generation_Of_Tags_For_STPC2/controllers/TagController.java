@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -25,12 +26,23 @@ public class TagController {
         return "main";
     }
 
-    @GetMapping("/exportToExcel/{area}/{millNumber}/{materialCode}")
-    public void exportIntoExcelFile(HttpServletResponse response, @PathVariable("area") String area,
-                                    @PathVariable("millNumber") String millNumber,
-                                    @PathVariable("materialCode") String materialCode) throws Exception {
-        TagReport generator = new TagReport(tagRepo);
-        generator.exportToExcel(area, millNumber, materialCode, response);
+    @PostMapping("exportToExcel")
+    public String exportIntoExcelFile(HttpServletResponse response,
+                                      @RequestParam("area") String area,
+                                      @RequestParam("millNumber") String millNumber,
+                                      @RequestParam("materialCode") String materialCode,
+                                      @RequestParam("diameter") Integer diameter,
+                                      @RequestParam("operator") Integer operator,
+                                      Model model) throws Exception {
+        model.addAttribute("area", area);
+        model.addAttribute("millNumber", millNumber);
+        model.addAttribute("materialCode", materialCode);
+        model.addAttribute("diameter", diameter);
+        model.addAttribute("operator", operator);
+
+        TagReport gen = new TagReport(tagRepo);
+        gen.exportToExcel(area, millNumber, materialCode, diameter, operator, response);
+        return null;
     }
 
     @GetMapping("/exp-by-ar-mill-mat")

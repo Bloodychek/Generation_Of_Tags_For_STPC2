@@ -4,96 +4,129 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>PrintBirka</title>
     <link rel="icon" href="/paper.png" type="image/png">
+    <link rel="stylesheet" href="/css/style.css">
+    <script defer src="/js/tabs.js"></script>
+    <script defer src="/js/submitFromHandler.js"></script>
 </head>
 <body>
 <header>
     <h1 align="center"> Зона: грубо-среднее волочение </h1>
 </header>
-<form th:action="@{exp-by-ar-mill-mat}" method="get">
-        <table width="60%" border="3" align="center" style="border-collapse: collapse">
-            <div class="row justify-content-center">
-                <h3 class="text-center mt-1">Приход за период от:&nbsp; </h3>
-                <label for="area" class="mt-2">
-                    <input class="text-center" type="text" th:value="${area}" id="area" name="area"/>
-                </label> &nbsp;&nbsp;
-                <h3 class="text-center mt-1">mill:</h3>
-                <label for="millNumber" class="mt-2"> &nbsp;
-                    <input class="text-center" type="number" th:value="${millNumber}" id="millNumber" name="millNumber"/>
-                </label>&nbsp;
-                <h3 class="text-center mt-1">code:</h3>
-                <label for="materialCode" class="mt-2"> &nbsp;
-                    <input class="text-center" type="number" th:value="${materialCode}" id="materialCode" name="materialCode"/>
-                </label>&nbsp;
+
+<!--id="defaultOpen"-->
+<div class="tab">
+    <button class="tabLinks" data-name="D">Грубое Волочение зона D</button>
+    <button class="tabLinks" data-name="H">Среднее Волочение зона H</button>
+    <button class="tabLinks" data-name="Master">Master</button>
+</div>
+<!--+ '/' + ${area} + '/' + ${millNumber} + '/' + ${materialCode}-->
+<form th:action="@{'exportToExcel'}" method="POST">
+    <div style="display: flex; justify-content: left;">
+        <div class="tabContent" id="D" style="align-items: center">
+            <input class="text-center" type="text" th:value="D" id="areaD" name="area" hidden/>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">№ Стана:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${millNumber}" id="millNumberD" name="millNumber"/>
             </div>
-            <label class="mt-1">
-                <button class="btn btn-primary mt-1" style="padding: 2px 13px" type="submit">Отобразить
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">Код Материала:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${materialCode}" id="materialCodeD" name="materialCode"/>
+            </div>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">Оператор:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${operator}" id="operatorD" name="operator"/>
+            </div>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">Диаметр:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${diameter}" id="diameterD" name="diameter"/>
+            </div>
+            <div class="tabContent__element">
+                <p style="color: red" class="tabContent__content">
+                    Внимание: при вводе неправильных данных - будет распечатана пустая бирка
+                </p>
+            </div>
+            <div class="tabContent__element">
+                <button class="btn btn-primary mt-1 tabContent__content" style="padding: 2px 13px" type="submit">Печать Бирки
                 </button>
-            </label>
-
-
-            <!--<tr align="center">
-                <th>
-                    <h3>
-                        <fieldset>
-                            <legend>
-                                Выбор зоны:
-                            </legend>
-                            <div style="display: flex; justify-content: center;">
-                                <div style="align-items: center">
-                                    <input type="radio" id="area" name="area" th:value="${area}"/>
-                                    <label for="area">D</label>
-                                </div>
-                                &lt;!&ndash;<div style="align-items: center">
-                                    <input type="radio" id="H" name="drone" th:value="${area}"/>
-                                    <label for="H">H</label>
-                                </div>&ndash;&gt;
-                            </div>
-                        </fieldset>
-                    </h3>
-                </th>
-            </tr>-->
-        <tbody>
-        <tr align="center">
-            <!--<td><select id="actionStatusD" name="actionStatusD" th:value="${millNumber}">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="10">10</option>
-            </select></td>
-            <td><select id="actionStatusH" name="actionStatusH" th:value="${millNumber}">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-            </select></td>-->
-            <!--<td><label for="actionStatusD">D</label><input type="number" id="actionStatusD" th:value="${millNumber}">
-            </td>
-            <td><label for="actionStatusMaterialCode">D</label><input type="number" id="actionStatusMaterialCode" th:value="${materialCode}">
-            </td>-->
-        </tr>
-        <tr align="center">
-            <td>
-
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            </div>
+        </div>
+    </div>
 </form>
-<a th:href="@{'exportToExcel?' + '&area=' + ${area} + '&millNumber=' + ${millNumber} + '&materialCode=' + ${materialCode}}" class="">Печать бирки</a>
+
+<!--<form th:action="@{'exportToExcel'}" method="POST">
+    <div style="display: flex; justify-content: right;">
+        <div class="tabContent" id="D" style="align-items: center">
+            <input class="text-center" type="text" th:value="D" id="areaD" name="area" hidden/>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">№ Стана:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${millNumber}" id="millNumberD" name="millNumber"/>
+            </div>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">Код Материала:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${materialCode}" id="materialCodeD" name="materialCode"/>
+            </div>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">Оператор:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${operator}" id="operatorD" name="operator"/>
+            </div>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">Диаметр:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${diameter}" id="diameterD" name="diameter"/>
+            </div>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">Плавка:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${melt}" id="meltD" name="melt"/>
+            </div>
+            <div class="tabContent__element">
+                <p style="color: red" class="tabContent__content">
+                    Внимание: при вводе неправильных данных - будет распечатана пустая бирка
+                </p>
+            </div>
+            <div class="tabContent__element">
+                <button class="btn btn-primary mt-1 tabContent__content" style="padding: 2px 13px" type="submit">Печать Бирки
+                </button>
+            </div>
+        </div>
+    </div>
+</form>-->
+
+<form th:action="@{'exportToExcel'}" method="POST">
+    <div style="display: flex; justify-content: center;">
+        <div class="tabContent" id="H" style="align-items: center">
+            <input class="text-center" type="text" th:value="D" id="areaH" name="area" hidden/>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">№ Стана:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${millNumber}" id="millNumberH" name="millNumber"/>
+            </div>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">Код Материала:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${materialCode}" id="materialCodeH" name="materialCode"/>
+            </div>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">Оператор:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${operator}" id="operatorH" name="operator"/>
+            </div>
+            <div class="tabContent__element">
+                <span class="text-center mt-1 tabContent__title">Диаметр:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${diameter}" id="diameterH" name="diameter"/>
+            </div>
+            <div class="tabContent__element">
+                <p style="color: red" class="tabContent__content">
+                    Внимание: при вводе неправильных данных - будет распечатана пустая бирка
+                </p>
+            </div>
+            <div class="tabContent__element">
+                <button class="btn btn-primary mt-1 tabContent__content" style="padding: 2px 13px" type="submit">Печать Бирки
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<form method="POST">
+    <div class="tabContent" id="Master" style="align-items: center">
+        <p>Some block for master</p>
+    </div>
+</form>
+
 </body>
 </html>

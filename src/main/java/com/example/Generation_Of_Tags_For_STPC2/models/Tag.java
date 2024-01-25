@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 
@@ -28,13 +29,17 @@ public class Tag {
     @Column(name = "KOD")
     private int materialCode;
     @Column(name = "WES")
+    @Nullable
     private Integer weight;
     @Column(name = "PLAVKA")
+    @Nullable
     private Integer melt;
     @Column(name = "LENGTH_B")
+    @Nullable
     private Integer length;
     @Column(name = "ZONA")
     private String area;
     @Column(name="JOB_DIE")
+    @Nullable
     private Integer jobDie;
 }

@@ -6,8 +6,11 @@ import com.example.Generation_Of_Tags_For_STPC2.repositories.TagRepo;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -15,6 +18,8 @@ import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.example.Generation_Of_Tags_For_STPC2.beans.CellStyleUtil.setBodyStyle;
+import static com.example.Generation_Of_Tags_For_STPC2.beans.CellStyleUtil.setBordersForTag;
 import static com.example.Generation_Of_Tags_For_STPC2.beans.Constants.*;
 
 @RequiredArgsConstructor
@@ -25,56 +30,50 @@ public class TagReport {
     private Cell cell;
     private final TagRepo tagRepo;
 
-    public void exportToExcel(String area, String millNumber, String materialCode, HttpServletResponse response) throws Exception {
+    public void exportToExcel(String area, String millNumber, String materialCode, Integer diameter, Integer operator, HttpServletResponse response) throws Exception {
         InputStream file =
                 getClass().getClassLoader().getResourceAsStream(BIRKA_GSV + DOT_XLSX);
         if(file != null) workbook = new XSSFWorkbook(file);
 
         ApachePoiUtil.setResponseHeader(response, CONTENT_TYPE2, DOT_XLSX, BIRKA_GSV);
-        write(area, millNumber, materialCode);
+        write(area, millNumber, materialCode, diameter, operator);
+        setAutosizeColumn();
         ServletOutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
         workbook.close();
         outputStream.close();
     }
-    private void write(String area, String millNumber, String materialCode){
+    private void write(String area, String millNumber, String materialCode, Integer diameter, Integer operator){
         List<Tag> tagList = tagRepo.findByAreaAndMillNumberAndMaterialCode(area, millNumber, materialCode);
         sheet = workbook.getSheet(SHEET_NAME);
         for (Tag t: tagList
         ) {
-            //if(row.getCell().)
-            row = sheet.getRow(1);
-            cell = row.createCell(2);
-            cell.setCellValue(1234);
-            row = sheet.getRow(2);
-            cell = row.createCell(1);
-            cell.setCellValue(t.getMillNumber());
-            cell = row.createCell(3);
-            cell.setCellValue(t.getDateTime().format(DateTimeFormatter.ofPattern(DATE_FORMAT)));
-            cell = row.createCell(5);
-            cell.setCellValue(t.getShift());
-            row = sheet.getRow(3);
-            cell = row.createCell(1);
-            cell.setCellValue(23);
-            cell = row.createCell(3);
-            cell.setCellValue(t.getDateTime().format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
-            cell = row.createCell(5);
-            cell.setCellValue(t.getBrigade());
-            row = sheet.getRow(4);
-            cell = row.createCell(1);
-            cell.setCellValue(t.getMaterialCode());
-            cell = row.createCell(3);
-            cell.setCellValue(44);
-            cell = row.createCell(5);
-            cell.setCellValue(t.getWeight());
-            row = sheet.getRow(5);
-            cell = row.createCell(1);
-            cell.setCellValue(t.getMelt());
-            cell = row.createCell(3);
-            cell.setCellValue(t.getLength());
-            row = sheet.getRow(6);
-            cell = row.createCell(4);
-            cell.setCellValue(t.getJobDie());
+            ApachePoiUtil.createCell(sheet.getRow(1), 1, t.getId(), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(2), 1, t.getMillNumber(), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(2), 3, t.getDateTime().format(DateTimeFormatter.ofPattern(DATE_FORMAT)), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(2), 5, t.getShift(), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(3), 1, operator, setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(3), 3, t.getDateTime().format(DateTimeFormatter.ofPattern(TIME_FORMAT)), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(3), 5, t.getBrigade(), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(4), 1, t.getMaterialCode(), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(4), 3, diameter, setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(4), 5, t.getWeight(), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(5), 1, t.getMelt(), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(5), 3, t.getLength(), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
+            ApachePoiUtil.createCell(sheet.getRow(6), 4, t.getJobDie(), setBodyStyle(workbook, 12, TNR, CENTER, false, false));
         }
+        setBordersForTag(row, sheet, 0, 3, 0, 5);
+        setBordersForTag(row, sheet, 4, 5, 0, 5);
+        setBordersForTag(row, sheet, 6, 6, 0, 5);
+    }
+
+    private void setAutosizeColumn() {
+        sheet.autoSizeColumn(0, true);
+        sheet.autoSizeColumn(1, true);
+        sheet.autoSizeColumn(2, true);
+        sheet.autoSizeColumn(3, true);
+        sheet.autoSizeColumn(4, true);
+        sheet.autoSizeColumn(5, true);
+        sheet.autoSizeColumn(6, true);
     }
 }
