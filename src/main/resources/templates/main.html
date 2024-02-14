@@ -5,23 +5,24 @@
     <title>PrintBirka</title>
     <link rel="icon" href="/paper.png" type="image/png">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tableForMaster.css">
+    <link rel="stylesheet" href="/css/tabs.css">
     <script defer src="/js/tabs.js"></script>
-    <script defer src="/js/submitFromHandler.js"></script>
+    <script defer src="/js/submitFormHandler.js"></script>
 </head>
 <body>
 <header>
     <h1 align="center"> Зона: грубо-среднее волочение </h1>
 </header>
 
-<!--id="defaultOpen"-->
 <div class="tab">
-    <button class="tabLinks" data-name="D">Грубое Волочение зона D</button>
-    <button class="tabLinks" data-name="H">Среднее Волочение зона H</button>
-    <button class="tabLinks" data-name="Master">Master</button>
+    <button class="tabLinks" data-name="D">Грубое волочение: зона D</button>
+    <button class="tabLinks" data-name="H">Среднее волочение: зона H</button>
+    <button class="tabLinks" data-name="Master">Мастер</button>
 </div>
-<!--+ '/' + ${area} + '/' + ${millNumber} + '/' + ${materialCode}-->
-<form th:action="@{'/exportToPdf'}" method="POST">
-    <div style="display: flex; justify-content: left;">
+
+<form class="form__birka" th:action="@{'/exportToPdf'}" method="POST">
+    <div class="container">
         <div class="tabContent" id="D" style="align-items: center">
             <input class="text-center" type="text" th:value="D" id="areaD" name="area" hidden/>
             <div class="tabContent__element">
@@ -33,20 +34,17 @@
                 <input class="text-center tabContent__content" type="number" th:value="${materialCode}" id="materialCodeD" name="materialCode"/>
             </div>
             <div class="tabContent__element">
-                <span class="text-center mt-1 tabContent__title">Оператор:</span>
-                <input class="text-center tabContent__content" type="number" th:value="${operator}" id="operatorD" name="operator"/>
-            </div>
-            <div class="tabContent__element">
-                <span class="text-center mt-1 tabContent__title">Диаметр:</span>
-                <input class="text-center tabContent__content" type="number" th:value="${diameter}" id="diameterD" name="diameter"/>
-            </div>
-            <div class="tabContent__element">
                 <span class="text-center mt-1 tabContent__title">Плавка:</span>
                 <input class="text-center tabContent__content" type="number" th:value="${melt}" id="meltD" name="melt"/>
             </div>
+<!--            <div class="tabContent__element">-->
+<!--                <span class="text-center mt-1 tabContent__title">Оператор:</span>-->
+<!--                <input class="text-center tabContent__content" type="number" th:value="${operator}" id="operatorD" name="operator"/>-->
+<!--            </div>-->
             <div class="tabContent__element">
                 <p style="color: red" class="tabContent__content">
-                    Внимание: при вводе неправильных данных - будет распечатана пустая бирка
+                    Внимание: при вводе неправильных данных - будет распечатана пустая бирка. <br>
+                    После нажатия на кнопку подождите несколько секунд до печати!
                 </p>
             </div>
             <div class="tabContent__element">
@@ -57,10 +55,10 @@
     </div>
 </form>
 
-<form th:action="@{'/exportToPdf'}" method="POST">
+<form class="form__birka" th:action="@{'/exportToPdf'}" method="POST">
     <div style="display: flex; justify-content: center;">
         <div class="tabContent" id="H" style="align-items: center">
-            <input class="text-center" type="text" th:value="D" id="areaH" name="area" hidden/>
+            <input class="text-center" type="text" th:value="H" id="areaH" name="area" hidden/>
             <div class="tabContent__element">
                 <span class="text-center mt-1 tabContent__title">№ Стана:</span>
                 <input class="text-center tabContent__content" type="number" th:value="${millNumber}" id="millNumberH" name="millNumber"/>
@@ -70,13 +68,13 @@
                 <input class="text-center tabContent__content" type="number" th:value="${materialCode}" id="materialCodeH" name="materialCode"/>
             </div>
             <div class="tabContent__element">
-                <span class="text-center mt-1 tabContent__title">Оператор:</span>
-                <input class="text-center tabContent__content" type="number" th:value="${operator}" id="operatorH" name="operator"/>
+                <span class="text-center mt-1 tabContent__title">Плавка:</span>
+                <input class="text-center tabContent__content" type="number" th:value="${melt}" id="meltH" name="melt"/>
             </div>
-            <div class="tabContent__element">
-                <span class="text-center mt-1 tabContent__title">Диаметр:</span>
-                <input class="text-center tabContent__content" type="number" th:value="${diameter}" id="diameterH" name="diameter"/>
-            </div>
+<!--            <div class="tabContent__element">-->
+<!--                <span class="text-center mt-1 tabContent__title">Оператор:</span>-->
+<!--                <input class="text-center tabContent__content" type="number" th:value="${operator}" id="operatorH" name="operator"/>-->
+<!--            </div>-->
             <div class="tabContent__element">
                 <p style="color: red" class="tabContent__content">
                     Внимание: при вводе неправильных данных - будет распечатана пустая бирка
@@ -89,11 +87,138 @@
         </div>
     </div>
 </form>
-<form method="POST">
-    <div class="tabContent" id="Master" style="align-items: center">
-        <p>Some block for master</p>
-    </div>
-</form>
+    <div class="tabContent" id="Master">
+        <div class="container__master">
+            <!--        грубое-->
 
+            <div class="rough_wrapper">
+                <div class="rough">
+                        <form class="form__master" action="main" method="POST">
+                            <span class="text-center mt-1 tabContent__title">Грубое Волочение:</span>
+                            <input type="text" value="D" name="area" hidden/>
+                            <input type="text" value="patch" name="_method" hidden/>
+
+                            <label class="personalNumber" for="tabNumD">Перс. №&nbsp;&nbsp;
+                                <input class="text-center tabContent__content tabNum" type="text" id="tabNumD" name="tabNum" pattern="\d{6}" maxlength="6" required/><br>
+                            </label>
+                            <span class="text-center mt-1 tabContent__subtitle">Машины:</span></br>
+                            <div class="checkboxes">
+                                <label class="label-border" for="machine1D">№1:
+                                    <input type="checkbox" id="machine1D" name="machines[]" value="1"/>
+                                </label>
+
+                                <label class="label-border" for="machine2D">№2:
+                                    <input type="checkbox" id="machine2D" name="machines[]" value="2">
+                                </label>
+
+                                <label class="label-border" for="machine3D">№3:
+                                    <input type="checkbox" id="machine3D" name="machines[]" value="3">
+                                </label>
+
+                                <label class="label-border" for="machine4D">№4:
+                                    <input type="checkbox" id="machine4D" name="machines[]" value="4">
+                                </label>
+
+                                <label class="label-border" for="machine5D">№5:
+                                    <input type="checkbox" id="machine5D" name="machines[]" value="5">
+                                </label>
+                            </div>
+                            <div class="checkboxes">
+                                <label class="label-border" for="machine6D">№6:
+                                    <input type="checkbox" id="machine6D" name="machines[]" value="6">
+                                </label>
+
+                                <label class="label-border" for="machine7D">№7:
+                                    <input type="checkbox" id="machine7D" name="machines[]" value="7">
+                                </label>
+
+                                <label class="label-border" for="machine8D">№8:
+                                    <input type="checkbox" id="machine8D" name="machines[]" value="8">
+                                </label>
+
+                                <label class="label-border"  for="machine10D">№10:
+                                    <input type="checkbox" id="machine10D" name="machines[]" value="10">
+                                </label>
+                            </div>
+                            <div class="master__submit-wrapper">
+                                <input class="master__submit" type="submit" value="Отправить">
+                            </div>
+
+                        </form>
+                </div>
+                <div class="table tableD">
+                    <div class="td">№ Стана</div>
+                    <div class="td">Табельный №</div>
+                </div>
+            </div>
+            <!--        среднее-->
+            <div class="average_wrapper">
+                <div class="average">
+                    <form class="form__master" action="main" method="POST">
+                        <span class="text-center mt-1 tabContent__title">Среднее Волочение:</span>
+                        <input type="text" value="H" name="area" hidden/>
+                        <input type="text" value="patch" name="_method" hidden/>
+                        <label class="personalNumber" for="tabNumH">Перс. № &nbsp;&nbsp;
+                            <input class="text-center tabContent__content tabNum" type="text" name="tabNum" id="tabNumH" pattern="\d{6}" maxlength="6" required/><br>
+                        </label>
+                        <span class="text-center mt-1 tabContent__subtitle">Машины:</span><br>
+                        <div class="checkboxes">
+                            <label class="label-border" for="machine1H">№1:
+                                <input type="checkbox" id="machine1H" name="machines[]" value="1">
+                            </label>
+                            <label class="label-border" for="machine2H">№2:
+                                <input type="checkbox" id="machine2H" name="machines[]" value="2">
+                            </label>
+                            <label class="label-border" for="machine3H">№3:
+                                <input type="checkbox" id="machine3H" name="machines[]" value="3">
+                            </label>
+                            <label class="label-border" for="machine4H">№4:
+                                <input type="checkbox" id="machine4H" name="machines[]" value="4">
+                            </label>
+                            <label class="label-border" for="machine5H">№5:
+                                <input type="checkbox" id="machine5H" name="machines[]" value="5">
+                            </label>
+                            <label class="label-border" for="machine6H">№6:
+                                <input type="checkbox" id="machine6H" name="machines[]" value="6">
+                            </label>
+                            <label class="label-border" for="machine7H">№7:
+                                <input type="checkbox" id="machine7H" name="machines[]" value="7">
+                            </label>
+                        </div>
+                        <div class="checkboxes">
+                            <label class="label-border" for="machine8H">№8:
+                                <input type="checkbox" id="machine8H" name="machines[]" value="8">
+                            </label>
+                            <label class="label-border" for="machine9H">№9:
+                                <input type="checkbox" id="machine9H" name="machines[]" value="9">
+                            </label>
+                            <label class="label-border" for="machine10H">№10:
+                                <input type="checkbox" id="machine10H" name="machines[]" value="10">
+                            </label>
+                            <label class="label-border" for="machine11H">№11:
+                                <input type="checkbox" id="machine11H" name="machines[]" value="11">
+                            </label>
+                            <label class="label-border" for="machine12H">№12:
+                                <input type="checkbox" id="machine12H" name="machines[]" value="12">
+                            </label>
+                            <label class="label-border" for="machine13H">№13:
+                                <input type="checkbox" id="machine13H" name="machines[]" value="13">
+                            </label>
+                            <label class="label-border" for="machine14H">№14:
+                                <input type="checkbox" id="machine14H" name="machines[]" value="14"><br>
+                            </label>
+                        </div>
+                        <div class="master__submit-wrapper">
+                            <input class="master__submit" type="submit" value="Отправить">
+                        </div>
+                    </form>
+                </div>
+                <div class="table tableH">
+                    <div class="td">№ Стана</div>
+                    <div class="td">Табельный №</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

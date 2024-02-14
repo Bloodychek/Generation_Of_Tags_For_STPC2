@@ -21,4 +21,5 @@ public interface TagRepo extends JpaRepository<Tag, Long> {
             "print_birka = 0 and \n" +
             "change_out is not null)\n", nativeQuery = true)
     List<Tag> findByAreaAndMillNumberAndMaterialCode(String area, String millNumber, String materialCode);
+
 }

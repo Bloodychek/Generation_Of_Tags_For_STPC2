@@ -1,7 +1,9 @@
 package com.example.Generation_Of_Tags_For_STPC2.tagReports;
 
 import com.example.Generation_Of_Tags_For_STPC2.models.Tag;
+import com.example.Generation_Of_Tags_For_STPC2.repositories.MaterialCodeRepo;
 import com.example.Generation_Of_Tags_For_STPC2.repositories.TagRepo;
+import com.example.Generation_Of_Tags_For_STPC2.services.StatusMachineServices;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -39,10 +41,12 @@ import static com.example.Generation_Of_Tags_For_STPC2.beans.Constants.*;
 @RequiredArgsConstructor
 public class TagReport {
     private final TagRepo tagRepo;
+    private final MaterialCodeRepo materialCodeRepo;
+    private final StatusMachineServices machineServices;
     private static final String OUTPUT_FILE = "src\\main\\resources\\birka_GSV.pdf";
 
-    public void exportToPdf(String area, String millNumber, String materialCode, Integer diameter, Integer operator, Integer melt) throws Exception {
-        if(area.isEmpty() || millNumber.isEmpty() || materialCode == null || operator == null){
+    public void exportToPdf(String area, String millNumber, String materialCode, String diameter, Integer melt) throws Exception {
+        if(millNumber.isEmpty() || materialCode == null || melt == null){
             call("src\\main\\resources\\empty_Birka_GSV.pdf");
         }
 
@@ -62,109 +66,109 @@ public class TagReport {
             table.setHorizontalAlignment(HorizontalAlignment.CENTER);
             table.setVerticalAlignment(VerticalAlignment.MIDDLE);
 
-                //-------------------------- HEADER --------------------------
+            //-------------------------- HEADER --------------------------
 
-                table.addCell(createCell(AREA_D, 6, style, TextAlignment.CENTER).setBorderLeft(new DashedBorder(1))
-                        .setBorderTop(new DashedBorder(1)).setBorderRight(new DashedBorder(1)).setBorderBottom(Border.NO_BORDER).setPaddingTop(25));
+            table.addCell(createCell(AREA_D, 6, style, TextAlignment.CENTER).setBorderLeft(new DashedBorder(1))
+                    .setBorderTop(new DashedBorder(1)).setBorderRight(new DashedBorder(1)).setBorderBottom(Border.NO_BORDER).setPaddingTop(25));
 
-                //-------------------------- 1 СТРОКА ------------------------
+            //-------------------------- 1 СТРОКА ------------------------
 
-                table.addCell(createCell(KEY_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderLeft(new DashedBorder(1))
-                        .setPaddingLeft(32).setBorderRight(Border.NO_BORDER).setPaddingTop(25));
+            table.addCell(createCell(KEY_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderLeft(new DashedBorder(1))
+                    .setPaddingLeft(32).setBorderRight(Border.NO_BORDER).setPaddingTop(25));
 
-                table.addCell(createCell(String.valueOf(t.getId()), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
-                        .setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(String.valueOf(t.getId()), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
+                    .setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(SPACE, 4, style, TextAlignment.LEFT).setPaddingTop(25).setBorder(Border.NO_BORDER)
-                        .setBorderRight(new DashedBorder(1)));
+            table.addCell(createCell(SPACE, 4, style, TextAlignment.LEFT).setPaddingTop(25).setBorder(Border.NO_BORDER)
+                    .setBorderRight(new DashedBorder(1)));
 
-                //-------------------------- 2 СТРОКА ------------------------
+            //-------------------------- 2 СТРОКА ------------------------
 
-                table.addCell(createCell(MILL_NUMBER_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
-                        .setBorderLeft(new DashedBorder(1)).setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(MILL_NUMBER_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
+                    .setBorderLeft(new DashedBorder(1)).setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(String.valueOf(t.getMillNumber()), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
-                        .setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(String.valueOf(t.getMillNumber()), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
+                    .setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(DATE_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(DATE_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(t.getDateTime().format(DateTimeFormatter.ofPattern(DATE_FORMAT)), 0, style, TextAlignment.LEFT)
-                        .setBorder(Border.NO_BORDER).setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(t.getDateTime().format(DateTimeFormatter.ofPattern(DATE_FORMAT)), 0, style, TextAlignment.LEFT)
+                    .setBorder(Border.NO_BORDER).setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(SHIFT_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(SHIFT_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(String.valueOf(t.getShift()), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderRight(new DashedBorder(1))
-                        .setPaddingTop(25));
+            table.addCell(createCell(String.valueOf(t.getShift()), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderRight(new DashedBorder(1))
+                    .setPaddingTop(25));
 
-                //-------------------------- 3 СТРОКА ------------------------
+            //-------------------------- 3 СТРОКА ------------------------
 
-                table.addCell(createCell(OPERATOR_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderLeft(new DashedBorder(1))
-                        .setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(OPERATOR_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderLeft(new DashedBorder(1))
+                    .setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
 
-                table.addCell(createCell(String.valueOf(operator), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
-                        .setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(String.valueOf(machineServices.getTabNum(area, millNumber)), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
+                    .setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
 
-                table.addCell(createCell(TIME_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32)
-                        .setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(TIME_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32)
+                    .setPaddingTop(25).setPaddingBottom(25));
 
-                table.addCell(createCell(t.getDateTime().format(DateTimeFormatter.ofPattern(TIME_FORMAT)), 0, style, TextAlignment.LEFT)
-                        .setBorder(Border.NO_BORDER).setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(t.getDateTime().format(DateTimeFormatter.ofPattern(TIME_FORMAT)), 0, style, TextAlignment.LEFT)
+                    .setBorder(Border.NO_BORDER).setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
 
-                table.addCell(createCell(BRIGADE_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32)
-                        .setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(BRIGADE_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32)
+                    .setPaddingTop(25).setPaddingBottom(25));
 
-                table.addCell(createCell(String.valueOf(t.getBrigade()), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
-                                .setBorderRight(new DashedBorder(1)).setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(String.valueOf(t.getBrigade()), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
+                    .setBorderRight(new DashedBorder(1)).setPaddingTop(25).setPaddingBottom(25));
 
-                //-------------------------- 4 СТРОКА ------------------------
+            //-------------------------- 4 СТРОКА ------------------------
 
-                table.addCell(createCell(MATERIAL_CODE_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
-                        .setBorderLeft(new DashedBorder(1)).setBorderTop(new DashedBorder(1)).setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(MATERIAL_CODE_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
+                    .setBorderLeft(new DashedBorder(1)).setBorderTop(new DashedBorder(1)).setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(String.valueOf(t.getMaterialCode()), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
-                        .setBorderTop(new DashedBorder(1)).setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(String.valueOf(t.getMaterialCode()), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
+                    .setBorderTop(new DashedBorder(1)).setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(DIAMETER_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderTop(new DashedBorder(1))
-                        .setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(DIAMETER_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderTop(new DashedBorder(1))
+                    .setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(diameter + MM, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
-                        .setBorderTop(new DashedBorder(1)).setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(materialCodeRepo.getDiameter(materialCode).get(0).getDiameter() + MM, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
+                    .setBorderTop(new DashedBorder(1)).setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(WEIGHT_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderTop(new DashedBorder(1))
-                        .setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(WEIGHT_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderTop(new DashedBorder(1))
+                    .setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(String.format("%.3f", t.getLength() * (((3.14 * (diameter * diameter) * 7.85) / 4) / 1000)) + KG, 0, style,
-                        TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderTop(new DashedBorder(1))
-                        .setBorderRight(new DashedBorder(1)).setPaddingTop(25));
+            table.addCell(createCell(diameter + KG, 0, style,
+                    TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderTop(new DashedBorder(1))
+                    .setBorderRight(new DashedBorder(1)).setPaddingTop(25));
 
-                //-------------------------- 5 СТРОКА ------------------------
+            //-------------------------- 5 СТРОКА ------------------------
 
-                table.addCell(createCell(MELT_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderLeft(new DashedBorder(1))
-                        .setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(MELT_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderLeft(new DashedBorder(1))
+                    .setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
 
-                table.addCell(createCell(String.valueOf(melt), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
-                        .setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(String.valueOf(melt), 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
+                    .setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
 
-                table.addCell(createCell(LENGTH_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32)
-                        .setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(LENGTH_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32)
+                    .setPaddingTop(25).setPaddingBottom(25));
 
-                table.addCell(createCell(t.getLength() + M, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
-                        .setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(t.getLength() + M, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER)
+                    .setPaddingLeft(32).setPaddingTop(25).setPaddingBottom(25));
 
-                table.addCell(createCell(QUALITY_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32).setPaddingTop(25));
+            table.addCell(createCell(QUALITY_COLON, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setPaddingLeft(32).setPaddingTop(25));
 
-                table.addCell(createCell(CS, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderRight(new DashedBorder(1))
-                        .setPaddingTop(25).setPaddingBottom(25));
+            table.addCell(createCell(CS, 0, style, TextAlignment.LEFT).setBorder(Border.NO_BORDER).setBorderRight(new DashedBorder(1))
+                    .setPaddingTop(25).setPaddingBottom(25));
 
-                //-------------------------- 6 СТРОКА ------------------------
+            //-------------------------- 6 СТРОКА ------------------------
 
-                table.addCell(createCell(HOURS_AFTER_DIE_CHANGE_COLON, 3, style, TextAlignment.LEFT).setBorderLeft(new DashedBorder(1))
-                        .setBorderTop(new DashedBorder(1)).setBorderRight(Border.NO_BORDER).setBorderBottom(new DashedBorder(1)).setPaddingLeft(32)
-                        .setPaddingTop(25));
+            table.addCell(createCell(HOURS_AFTER_DIE_CHANGE_COLON, 3, style, TextAlignment.LEFT).setBorderLeft(new DashedBorder(1))
+                    .setBorderTop(new DashedBorder(1)).setBorderRight(Border.NO_BORDER).setBorderBottom(new DashedBorder(1)).setPaddingLeft(32)
+                    .setPaddingTop(25));
 
-                table.addCell(createCell(String.valueOf(t.getJobDie()), 3, style, TextAlignment.CENTER).setBorderTop(new DashedBorder(1))
-                        .setBorderRight(new DashedBorder(1)).setBorderLeft(Border.NO_BORDER).setBorderBottom(new DashedBorder(1)).setPaddingTop(25)
-                        .setPaddingBottom(25));
+            table.addCell(createCell(String.valueOf(t.getJobDie()), 3, style, TextAlignment.CENTER).setBorderTop(new DashedBorder(1))
+                    .setBorderRight(new DashedBorder(1)).setBorderLeft(Border.NO_BORDER).setBorderBottom(new DashedBorder(1)).setPaddingTop(25)
+                    .setPaddingBottom(25));
 
             document.add(table);
         }

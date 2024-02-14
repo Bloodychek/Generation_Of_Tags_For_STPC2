@@ -6,7 +6,7 @@ body {
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
-    background-color: #f1f1f1;
+    background-color: #282A35;
 }
 
 /* Style the buttons inside the tab */
@@ -19,6 +19,7 @@ body {
     padding: 14px 16px;
     transition: 0.3s;
     font-size: 17px;
+    color:white;
 }
 
 /* Change background color of buttons on hover */
@@ -29,6 +30,7 @@ body {
 /* Create an active/current tablink class */
 .tab button.active {
     background-color: #ccc;
+    color: black;
 }
 
 /* Style the tab content */
@@ -50,11 +52,19 @@ body {
     display: flex;
     justify-content: center;
     font-size: 25px;
+    margin-bottom: 20px;
 }
 
 .tabContent__content {
     width: 500px;
     font-size: 20px;
+}
+
+.tabContent__subtitle {
+    display: flex;
+    margin-top: 10px;
+    justify-content: flex-start;
+    margin-left: 33px;
 }
 
 /* Style the close button */
@@ -66,4 +76,151 @@ body {
 
 .topright:hover {
     color: red;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.container__master {
+    display: grid;
+    grid-template-areas: "rw aw";
+    grid-template-columns: 1fr 1fr;
+    margin-top: 20px;
+}
+
+.rough_wrapper {
+    display: grid;
+    grid-area: rw;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 80px;
+    border-right: 7px dashed #96D4D4;
+}
+
+.average_wrapper {
+    display: grid;
+    grid-area: aw;
+    grid-template-columns: 1fr auto;
+    margin-left: 90px;
+}
+
+.tableD {
+    /*grid-area: tableD;*/
+    font-size: 10px;
+    font-weight: bold;
+}
+.tableH {
+    /*grid-area: tableH;*/
+    font-size: 10px;
+    font-weight: bold;
+}
+.table-border {
+    border-right: 7px dashed #96D4D4;
+    width: 295px;
+}
+
+.rough {
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    border: 1px solid black;
+    background-color: #96D4D4;
+    height: 320px;
+    width: 550px;
+}
+
+.average {
+    /*grid-area: average;*/
+    display: flex;
+    flex-direction: column;
+    border-radius: 30px;
+    border: 1px solid black;
+    background-color: #96D4D4;
+    width: 550px;
+    height: 320px;
+    margin-bottom: 25px;
+}
+
+.tables {
+    display: flex;
+    justify-content: space-around;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.label-border {
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #FFEC71;
+    width: 50px;
+    margin: 2px 10px 2px 10px;
+}
+
+.tabNum {
+    width: 100px;
+    border-radius: 10px;
+}
+
+.checkboxes {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.personalNumber {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.master__submit {
+    background-color: #FFEC71;
+    color: #9E004F;
+    cursor: pointer;
+    display: flex;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    justify-self: flex-end;
+    margin-right: 20px;
+}
+
+.master__submit-wrapper {
+    width: 100%;
+    display: grid;
+    margin: 42px 0 15px 0;
+}
+
+.master__submit:hover {
+    text-decoration: none;
+    background-color: #9E004F;
+    color: white;
+}
+
+@media only screen and (max-width: 1300px) {
+    .container__master {
+        display: flex;
+        flex-direction: column;
+    }
+    .average_wrapper {
+        margin-left: 0;
+        grid-template-columns: auto auto;
+        grid-gap: 0px;
+    }
+    .rough_wrapper {
+        grid-template-columns: auto auto;
+        border-right: 0px;
+        border-bottom: 7px dashed #96D4D4;
+        margin-bottom: 50px;
+        padding-bottom: 50px;
+        grid-gap: 0px;
+    }
 }
