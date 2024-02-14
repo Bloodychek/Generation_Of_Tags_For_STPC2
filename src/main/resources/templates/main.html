@@ -20,41 +20,8 @@
     <button class="tabLinks" data-name="Master">Master</button>
 </div>
 <!--+ '/' + ${area} + '/' + ${millNumber} + '/' + ${materialCode}-->
-<form th:action="@{'exportToExcel'}" method="POST">
+<form th:action="@{'/exportToPdf'}" method="POST">
     <div style="display: flex; justify-content: left;">
-        <div class="tabContent" id="D" style="align-items: center">
-            <input class="text-center" type="text" th:value="D" id="areaD" name="area" hidden/>
-            <div class="tabContent__element">
-                <span class="text-center mt-1 tabContent__title">№ Стана:</span>
-                <input class="text-center tabContent__content" type="number" th:value="${millNumber}" id="millNumberD" name="millNumber"/>
-            </div>
-            <div class="tabContent__element">
-                <span class="text-center mt-1 tabContent__title">Код Материала:</span>
-                <input class="text-center tabContent__content" type="number" th:value="${materialCode}" id="materialCodeD" name="materialCode"/>
-            </div>
-            <div class="tabContent__element">
-                <span class="text-center mt-1 tabContent__title">Оператор:</span>
-                <input class="text-center tabContent__content" type="number" th:value="${operator}" id="operatorD" name="operator"/>
-            </div>
-            <div class="tabContent__element">
-                <span class="text-center mt-1 tabContent__title">Диаметр:</span>
-                <input class="text-center tabContent__content" type="number" th:value="${diameter}" id="diameterD" name="diameter"/>
-            </div>
-            <div class="tabContent__element">
-                <p style="color: red" class="tabContent__content">
-                    Внимание: при вводе неправильных данных - будет распечатана пустая бирка
-                </p>
-            </div>
-            <div class="tabContent__element">
-                <button class="btn btn-primary mt-1 tabContent__content" style="padding: 2px 13px" type="submit">Печать Бирки
-                </button>
-            </div>
-        </div>
-    </div>
-</form>
-
-<!--<form th:action="@{'exportToExcel'}" method="POST">
-    <div style="display: flex; justify-content: right;">
         <div class="tabContent" id="D" style="align-items: center">
             <input class="text-center" type="text" th:value="D" id="areaD" name="area" hidden/>
             <div class="tabContent__element">
@@ -88,9 +55,9 @@
             </div>
         </div>
     </div>
-</form>-->
+</form>
 
-<form th:action="@{'exportToExcel'}" method="POST">
+<form th:action="@{'/exportToPdf'}" method="POST">
     <div style="display: flex; justify-content: center;">
         <div class="tabContent" id="H" style="align-items: center">
             <input class="text-center" type="text" th:value="D" id="areaH" name="area" hidden/>
