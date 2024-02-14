@@ -1,5 +1,6 @@
 package com.example.Generation_Of_Tags_For_STPC2.repositories;
 
+import com.example.Generation_Of_Tags_For_STPC2.models.MaterialCode;
 import com.example.Generation_Of_Tags_For_STPC2.models.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,5 +21,6 @@ public interface TagRepo extends JpaRepository<Tag, Long> {
             "kod =:materialCode and\n" +
             "print_birka = 0 and \n" +
             "change_out is not null)\n", nativeQuery = true)
-    List<Tag> findByAreaAndMillNumberAndMaterialCode(String area, String millNumber, String materialCode);
+    List<Tag> findByAreaAndMillNumberAndMaterialCode(String area, Integer millNumber, String materialCode);
+
 }

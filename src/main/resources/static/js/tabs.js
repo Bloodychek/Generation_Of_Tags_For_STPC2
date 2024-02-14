@@ -1,5 +1,9 @@
 const tabLink = document.querySelectorAll('.tabLinks');
-console.log(tabLink);
+const password = 'master';
+const masterSessionTime = 900000;
+let timer;
+
+
 if (!localStorage.getItem('defaultOpen')) {
     localStorage.setItem('defaultOpen', 'D');
 }else {
@@ -11,25 +15,54 @@ if (!localStorage.getItem('defaultOpen')) {
 }
 
 tabLink.forEach(el => {
-    el.addEventListener('click', (ev) => {
-        openTab(ev,el.dataset.name);
+    el.addEventListener('click', async(ev) => {
+        clearTimeout(timer);
+        //при клике на мастер проверяем пароль
+        if (el.dataset.name === 'Master') {
+            let result = prompt('Введите пароль:');
+            if (result !== password) {
+                alert('Вы ввели не верный пароль');
+                tabLink.forEach(tab => {
+                    tab.classList.remove('active');
+                })
+                localStorage.setItem('defaultOpen', 'D');
+                openTab(localStorage.getItem('defaultOpen'));
+                return;
+            } else {
+                // timer(masterSessionTime);
+                timer =setTimeout(() => {
+                    localStorage.setItem('defaultOpen', 'D');
+                    document.getElementsByClassName("tabLinks")[0].click();
+                    return;
+                }, masterSessionTime);
+                const {loadTableData} = await import("/js/loadTableContent.js");
+                loadTableData(`api/masterTable/D`);
+                loadTableData(`api/masterTable/H`);
+            }
+        }
+        openTab(el.dataset.name);
         localStorage.setItem('defaultOpen', el.dataset.name);
     });
 });
 
-function openTab(evt, name) {
-    let i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabContent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tabLinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(name).style.display = "flex";
-    evt.currentTarget.className += " active";
-}
+function openTab(name) {
+    let tabContent, tabLinks;
+    tabContent = document.querySelectorAll(".tabContent");
+    tabLinks = document.querySelectorAll(".tabLinks");
+    //прячем содержимое табов
+    tabContent.forEach(tab => {
+        tab.classList.add('hide');
+        tab.classList.remove('show');
+    });
+    //отображаем нужный контент таба
+    document.getElementById(name).classList.remove('hide');
+    document.getElementById(name).classList.add('show');
 
+    //удаляем классы активности с кнопок и дабавляем на нужную
+    tabLinks.forEach(el => {
+        el.classList.remove('active');
+    })
+    document.querySelector(`[data-name=${name}]`).classList.add('active');
+}
 
 document.getElementsByClassName("defaultOpen")[0].click();

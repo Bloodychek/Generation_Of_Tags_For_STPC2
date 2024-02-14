@@ -1,0 +1,26 @@
+.table {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    background-color: #fff;
+    color: #444;
+    max-width: 200px;
+}
+
+.td {
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 150%;
+
+    border: 1px solid #9E004F;
+    background-color: white;;
+    color: black;
+}
+
+.row {
+    display: contents;
+}
+
+.td:hover {
+    background-color: #FFEC71;
+}
+

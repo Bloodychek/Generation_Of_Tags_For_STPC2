@@ -30,7 +30,7 @@ public class TagReport {
     private Cell cell;
     private final TagRepo tagRepo;
 
-    public void exportToExcel(String area, String millNumber, String materialCode, Integer diameter, Integer operator, HttpServletResponse response) throws Exception {
+    public void exportToExcel(String area, Integer millNumber, String materialCode, String diameter, Integer operator, HttpServletResponse response) throws Exception {
         InputStream file =
                 getClass().getClassLoader().getResourceAsStream(BIRKA_GSV + DOT_XLSX);
         if(file != null) workbook = new XSSFWorkbook(file);
@@ -43,7 +43,7 @@ public class TagReport {
         workbook.close();
         outputStream.close();
     }
-    private void write(String area, String millNumber, String materialCode, Integer diameter, Integer operator){
+    private void write(String area, Integer millNumber, String materialCode, String diameter, Integer operator){
         List<Tag> tagList = tagRepo.findByAreaAndMillNumberAndMaterialCode(area, millNumber, materialCode);
         sheet = workbook.getSheet(SHEET_NAME);
         for (Tag t: tagList
