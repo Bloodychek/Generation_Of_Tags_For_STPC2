@@ -17,29 +17,43 @@ public class Tag {
     @Column(name = "ID_LOG")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
+
     @Column(name = "N_STAN")
     private int millNumber;
+
     @Column(name = "CHANGE_OUT")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime dateTime;
+
     @Column(name = "N_SMEN")
     private int shift;
+
     @Column(name = "N_BRIG")
     private int brigade;
+
     @Column(name = "KOD")
     private int materialCode;
+
     @Column(name = "WES")
     @Nullable
     private Integer weight;
+
     @Column(name = "PLAVKA")
     @Nullable
     private Integer melt;
+
     @Column(name = "LENGTH_B")
     @Nullable
     private Integer length;
+
     @Column(name = "ZONA")
     private String area;
-    @Column(name="JOB_DIE")
+
+    @Column(name = "JOB_DIE")
     @Nullable
     private Integer jobDie;
+
+    @Column(name = "PRINT_BIRKA")
+    @Nullable
+    private Integer printBirka;
 }

@@ -22,4 +22,7 @@ public interface TagRepo extends JpaRepository<Tag, Long> {
             "change_out is not null)\n", nativeQuery = true)
     List<Tag> findByAreaAndMillNumberAndMaterialCode(String area, String millNumber, String materialCode);
 
+    @Query(value = "UPDATE mk_plus.GSV_BIRKA_PRN a SET print_birka = 1 WHERE a.id_log in (SELECT max(id_log)" +
+            "FROM mk_plus.gsv_birka_prn where print_birka = 0);", nativeQuery = true)
+    List<Tag> printAndUpdateTheLastRow();
 }

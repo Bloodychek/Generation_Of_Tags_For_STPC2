@@ -46,8 +46,10 @@ public class TagReport {
     private static final String OUTPUT_FILE = "src\\main\\resources\\birka_GSV.pdf";
 
     public void exportToPdf(String area, String millNumber, String materialCode, String diameter, Integer melt) throws Exception {
-        if(millNumber.isEmpty() || materialCode == null || melt == null){
-            call("src\\main\\resources\\empty_Birka_GSV.pdf");
+        if (area.equals("D") && millNumber.isEmpty() || materialCode == null || melt == null) {
+            call("src\\main\\resources\\empty_Birka_GSV_D.pdf");
+        } else if (area.equals("H") && millNumber.isEmpty() || materialCode == null || melt == null) {
+            call("src\\main\\resources\\empty_Birka_GSV_H.pdf");
         }
 
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter(OUTPUT_FILE));
@@ -61,15 +63,20 @@ public class TagReport {
         for (Tag t : tagList
         ) {
             Table table = new Table(6);
-            table.setWidth(UnitValue.createPercentValue(100));
+            table.setWidth(UnitValue.createPercentValue(98));
             table.setBorder(Border.NO_BORDER);
             table.setHorizontalAlignment(HorizontalAlignment.CENTER);
             table.setVerticalAlignment(VerticalAlignment.MIDDLE);
 
             //-------------------------- HEADER --------------------------
 
-            table.addCell(createCell(AREA_D, 6, style, TextAlignment.CENTER).setBorderLeft(new DashedBorder(1))
-                    .setBorderTop(new DashedBorder(1)).setBorderRight(new DashedBorder(1)).setBorderBottom(Border.NO_BORDER).setPaddingTop(25));
+            if (t.getArea().equals("D")) {
+                table.addCell(createCell(AREA_D, 6, style, TextAlignment.CENTER).setBorderLeft(new DashedBorder(1))
+                        .setBorderTop(new DashedBorder(1)).setBorderRight(new DashedBorder(1)).setBorderBottom(Border.NO_BORDER).setPaddingTop(25));
+            } else if(t.getArea().equals("H")) {
+                table.addCell(createCell(AREA_H, 6, style, TextAlignment.CENTER).setBorderLeft(new DashedBorder(1))
+                        .setBorderTop(new DashedBorder(1)).setBorderRight(new DashedBorder(1)).setBorderBottom(Border.NO_BORDER).setPaddingTop(25));
+            }
 
             //-------------------------- 1 СТРОКА ------------------------
 
